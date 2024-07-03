@@ -1,0 +1,59 @@
+// Default PIN and maximum attempts
+const defaultPin = "12345";
+const maxAttempts = 3;
+
+// Initial user account balance
+let accountBalance = 1000; // Example starting balance
+let attempts = 0;
+
+// Function to if user pin is equal to the default PIN
+function checkPin(inputPin) {
+  return inputPin === defaultPin;
+}
+
+// Function to process the transaction
+function transaction(amount, pin) {
+  // Validate the amount
+  if (isNaN(amount) || amount <= 0) {
+    alert("Invalid amount. Please enter a positive number.");
+    return false;
+  }
+
+  // Validate the PIN
+  if (!checkPin(pin)) {
+    attempts++;
+    alert("Incorrect PIN. You have ${maxAttempts - attempts} attempt(s) left.");
+    return false;
+  }
+
+  // Check if the amount is greater than the account balance
+  if (amount > accountBalance) {
+    alert("Insufficient funds. Please enter a smaller amount.");
+    return false;
+  }
+
+  // Subtract the amount from the account balance
+  accountBalance -= amount;
+  alert(`Transaction successful! You have withdrawn $${amount}. Your new balance is $${accountBalance}.`);
+  return true;
+}
+
+// Main function to handle user inputs
+function main() {
+  while (attempts < maxAttempts) {
+    // User inputs
+    let amount = parseFloat(prompt("Enter the amount to withdraw:"));
+    let pin = prompt("Enter your PIN:");
+
+    if (transaction(amount, pin)) {
+      break; // Exit the loop after a successful transaction
+    }
+  }
+
+  if (attempts === maxAttempts) {
+    alert("You have reached the maximum number of attempts. Try again after 24 hours. Process closed.");
+  }
+}
+
+// Call the main function to start the application
+main();
